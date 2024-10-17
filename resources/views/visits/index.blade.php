@@ -3,7 +3,7 @@
 @section('content')
     <div class="container mt-5">
         <h3>Data Visit</h3>
-        
+
         @if (Session::get('success'))
             <div class="alert alert-success">
                 {{ Session::get('success') }}
@@ -21,8 +21,9 @@
 
         <div class="d-flex justify-content-between align-items-center mb-3">
             <a href="{{ route('visit.create_data_visit') }}" class="btn btn-warning">Tambah Kunjungan</a>
-            <form class="d-flex me-2" role="Search" action="{{route('visit.data_visit')}}" method="GET">
-                <input type="text" name="search_visit" class="form-control me-2" placeholder="Search" aria-label="Search">
+            <form class="d-flex me-2" role="Search" action="{{ route('visit.data_visit') }}" method="GET">
+                <input type="text" name="search_visit" class="form-control me-2" placeholder="Search"
+                    aria-label="Search">
                 <button class="btn btn-outline-success me-2" type="submit">Search</button>
             </form>
         </div>
@@ -70,40 +71,41 @@
         </div>
 
         <!-- Modal Hapus -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
                 <form id="form-delete-visit" method="POST">
                     @csrf
                     @method('DELETE')
-                    <div class="modal-content">
-                        <div class="modal-header">
+                    <div class="modal-content" style="background-color: black; color: white;">
+                        <div class="modal-header" style="background-color: #343a40; color: white;">
                             <h5 class="modal-title" id="exampleModalLabel">Hapus Data Visit</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" style="filter: invert(1);">&times;</span>
+                            </button>
                         </div>
                         <div class="modal-body">
                             Apakah anda yakin ingin menghapus data ini: <span id="nama-visit"></span>?
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batalkan</button>
+                        <div class="modal-footer" style="background-color: #343a40;">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batalkan</button>
                             <button type="submit" class="btn btn-danger" id="confirm-delete">Hapus</button>
                         </div>
                     </div>
                 </form>
             </div>
         </div>
-    </div>
-@endsection
 
-@push('script')
-    <script>
-        function showModal(id, name) {
-            let urlDelete = "{{ route('visit.delete_data_visit', ':visit') }}";
-            urlDelete = urlDelete.replace(':visit', id);
-            document.getElementById('form-delete-visit').setAttribute('action', urlDelete);
-            document.getElementById('nama-visit').innerText = name;
-            var modalElement = document.getElementById('exampleModal');
-            var modal = new bootstrap.Modal(modalElement);
-            modal.show();
-        }
-    </script>
-@endpush
+    @endsection
+
+    @push('script')
+        <script>
+            function showModal(id, name) {
+                let urlDelete = "{{ route('visit.delete_data_visit', ':visit') }}";
+                urlDelete = urlDelete.replace(':visit', id);
+                document.getElementById('form-delete-visit').setAttribute('action', urlDelete);
+                document.getElementById('nama-visit').innerText = name;
+                $('#exampleModal').modal('show'); // Menggunakan jQuery untuk menampilkan modal di Bootstrap 4
+            }
+        </script>
+    @endpush

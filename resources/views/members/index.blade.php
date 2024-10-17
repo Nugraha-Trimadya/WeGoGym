@@ -14,8 +14,9 @@
         {{-- Add new member button --}}
         <div class="d-flex justify-content-between align-items-center mb-3">
             <a href="{{ route('member.create_data_member') }}" class="btn btn-warning">Tambah Member</a>
-            <form class="d-flex me-2" role="Search" action="{{route('member.data_member')}}" method="GET">
-                <input type="text" name="search_member" class="form-control me-2" placeholder="Search" aria-label="Search">
+            <form class="d-flex me-2" role="Search" action="{{ route('member.data_member') }}" method="GET">
+                <input type="text" name="search_member" class="form-control me-2" placeholder="Search"
+                    aria-label="Search">
                 <button class="btn btn-outline-success me-2" type="submit">Search</button>
             </form>
         </div>
@@ -48,10 +49,12 @@
                                 <td>{{ $member->membership_number }}</td>
                                 <td>
                                     {{-- Edit button --}}
-                                    <a href="{{ route('member.edit_data_member', $member->id) }}" class="btn btn-sm btn-warning">Edit</a>
-                                    
+                                    <a href="{{ route('member.edit_data_member', $member->id) }}"
+                                        class="btn btn-sm btn-warning">Edit</a>
+
                                     {{-- Delete button with modal trigger --}}
-                                    <button type="button" class="btn btn-sm btn-danger" onclick="showModal('{{ $member->id }}', '{{ $member->name }}')">Hapus</button>
+                                    <button type="button" class="btn btn-sm btn-danger"
+                                        onclick="showModal('{{ $member->id }}', '{{ $member->name }}')">Hapus</button>
                                 </td>
                             </tr>
                         @endforeach
@@ -66,43 +69,47 @@
         </div>
 
         {{-- Delete confirmation modal --}}
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
+        <!-- Delete confirmation modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
                 <form id="form-delete-member" method="POST">
                     @csrf
                     @method('DELETE')
-                    <div class="modal-content">
-                        <div class="modal-header">
+                    <div class="modal-content" style="background-color: black; color: white;">
+                        <div class="modal-header" style="background-color: #343a40; color: white;">
                             <h5 class="modal-title" id="exampleModalLabel">Hapus Data Member</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <!-- Corrected button for closing modal -->
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" style="filter: invert(1);">&times;</span>
+                            </button>
                         </div>
                         <div class="modal-body">
                             Apakah Anda yakin ingin menghapus data ini: <span id="nama-member"></span>?
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batalkan</button>
+                        <div class="modal-footer" style="background-color: #343a40;">
+                            <!-- "Batalkan" button now dismisses the modal -->
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batalkan</button>
                             <button type="submit" class="btn btn-danger" id="confirm-delete">Hapus</button>
                         </div>
                     </div>
                 </form>
             </div>
         </div>
-    </div>
-@endsection
 
-@push('script')
-    <script>
-        // Function to trigger the modal and set the form action dynamically
-        function showModal(id, name) {
-            let urlDelete = "{{ route('member.delete_data_member', ':member') }}";
-            urlDelete = urlDelete.replace(':member', id);
-            document.getElementById('form-delete-member').setAttribute('action', urlDelete);
-            document.getElementById('nama-member').innerText = name;
-            
-            // Show the modal
-            var modalElement = document.getElementById('exampleModal');
-            var modal = new bootstrap.Modal(modalElement);
-            modal.show();
-        }
-    </script>
-@endpush
+    @endsection
+
+    @push('script')
+        <script>
+            // Function to trigger the modal and set the form action dynamically
+            function showModal(id, name) {
+                let urlDelete = "{{ route('member.delete_data_member', ':member') }}";
+                urlDelete = urlDelete.replace(':member', id);
+                document.getElementById('form-delete-member').setAttribute('action', urlDelete);
+                document.getElementById('nama-member').innerText = name;
+
+                // Show the modal using jQuery for Bootstrap 4
+                $('#exampleModal').modal('show');
+            }
+        </script>
+    @endpush
