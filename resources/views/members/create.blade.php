@@ -14,6 +14,7 @@
             </div>
         @endif
 
+        <div class="container">
         <form method="POST" action="{{ route('member.store_data_member') }}">
             @csrf
             <div class="form-group">
@@ -33,5 +34,6 @@
             </div>
             <button type="submit" class="btn btn-primary">Simpan</button>
         </form>
+    </div>
     </div>
 @endsection

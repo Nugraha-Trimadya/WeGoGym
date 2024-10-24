@@ -17,6 +17,7 @@ use App\Http\Controllers\MemberController;
 |
 */
 
+
 Route::get('/', [PageController::class, 'index'])->name('home');
 
 Route::prefix('/visit')->name('visit.')->group(function () {
