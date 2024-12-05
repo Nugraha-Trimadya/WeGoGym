@@ -20,21 +20,28 @@
             @csrf
             @method('PATCH') <!-- Tetap gunakan PATCH untuk memperbarui data -->
 
-            <div class="form-group">
-                <label for="name">Nama</label>
+            <!-- Name field -->
+            <div class="form-group mb-3">
+                <label for="name" class="form-label">Nama</label>
                 <input type="text" name="name" class="form-control" value="{{ $visit->name ?? old('name') }}" required>
             </div>
-            <div class="form-group">
-                <label for="age">Umur</label>
+
+            <!-- Age field -->
+            <div class="form-group mb-3">
+                <label for="age" class="form-label">Umur</label>
                 <input type="number" name="age" class="form-control" value="{{ $visit->age ?? old('age') }}" required>
             </div>
-            <div class="form-group">
-                <label for="gender">Jenis Kelamin</label>
-                <select name="gender" class="form-control" required>
+
+            <!-- Gender field -->
+            <div class="form-group mb-3">
+                <label for="gender" class="form-label">Jenis Kelamin</label>
+                <select name="gender" class="form-select" required>
                     <option value="L" {{ $visit->gender == 'L' ? 'selected' : '' }}>Laki-laki</option>
                     <option value="P" {{ $visit->gender == 'P' ? 'selected' : '' }}>Perempuan</option>
                 </select>
             </div>
+
+            <!-- Submit button -->
             <button type="submit" class="btn btn-primary">Update</button>
         </form>
 

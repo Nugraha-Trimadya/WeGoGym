@@ -1,31 +1,30 @@
 @extends('homepages.homepage')
 
 @section('content')
-    <div class="container mt-5">
-        <h3>Daftar Member</h3>
+    <div class="container mt-5 pt-5"> <!-- Added pt-5 for top padding -->
+        <h3 class="mb-4" style="font-size: 2rem; color: #333; font-weight: 600;">Daftar Member</h3>
 
         {{-- Success message --}}
         @if (Session::get('success'))
-            <div class="alert alert-success">
+            <div class="alert alert-success mb-4">
                 {{ Session::get('success') }}
             </div>
         @endif
 
         {{-- Add new member button --}}
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <a href="{{ route('member.create_data_member') }}" class="btn btn-warning">Tambah Member</a>
-            <form class="d-flex me-2" role="Search" action="{{ route('member.data_member') }}" method="GET">
-                <input type="text" name="search_member" class="form-control me-2" placeholder="Search"
-                    aria-label="Search">
-                <button class="btn btn-outline-success me-2" type="submit">Search</button>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <a href="{{ route('member.create_data_member') }}" class="btn btn-warning py-2 px-4">Tambah Member</a>
+            <form class="d-flex w-50" role="Search" action="{{ route('member.data_member') }}" method="GET">
+                <input type="text" name="search_member" class="form-control me-2" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
             </form>
         </div>
 
         {{-- Members table --}}
         <div class="table-responsive">
-            <table class="table table-hover table-striped table-dark border-0">
-                <thead class="thead-light">
-                    <tr>
+            <table class="table table-hover table-striped table-bordered">
+                <thead>
+                    <tr class="bg-dark text-white">
                         <th>No</th>
                         <th>Nama</th>
                         <th>Umur</th>
@@ -49,8 +48,7 @@
                                 <td>{{ $member->membership_number }}</td>
                                 <td>
                                     {{-- Edit button --}}
-                                    <a href="{{ route('member.edit_data_member', $member->id) }}"
-                                        class="btn btn-sm btn-warning">Edit</a>
+                                    <a href="{{ route('member.edit_data_member', $member->id) }}" class="btn btn-sm btn-warning">Edit</a>
 
                                     {{-- Delete button with modal trigger --}}
                                     <button type="button" class="btn btn-sm btn-danger"
@@ -69,7 +67,6 @@
         </div>
 
         {{-- Delete confirmation modal --}}
-        <!-- Delete confirmation modal -->
         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -77,19 +74,15 @@
                     @csrf
                     @method('DELETE')
                     <div class="modal-content" style="background-color: black; color: white;">
-                        <div class="modal-header" style="background-color: #343a40; color: white;">
+                        <div class="modal-header" style="background-color: #343a40;">
                             <h5 class="modal-title" id="exampleModalLabel">Hapus Data Member</h5>
-                            <!-- Corrected button for closing modal -->
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true" style="filter: invert(1);">&times;</span>
-                            </button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             Apakah Anda yakin ingin menghapus data ini: <span id="nama-member"></span>?
                         </div>
                         <div class="modal-footer" style="background-color: #343a40;">
-                            <!-- "Batalkan" button now dismisses the modal -->
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batalkan</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batalkan</button>
                             <button type="submit" class="btn btn-danger" id="confirm-delete">Hapus</button>
                         </div>
                     </div>
@@ -108,8 +101,9 @@
                 document.getElementById('form-delete-member').setAttribute('action', urlDelete);
                 document.getElementById('nama-member').innerText = name;
 
-                // Show the modal using jQuery for Bootstrap 4
-                $('#exampleModal').modal('show');
+                // Show the modal using Bootstrap 5 JavaScript method
+                var modal = new bootstrap.Modal(document.getElementById('exampleModal'));
+                modal.show();
             }
         </script>
     @endpush

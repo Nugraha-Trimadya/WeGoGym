@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,14 +20,20 @@ use App\Http\Controllers\MemberController;
 
 
 Route::get('/', [PageController::class, 'index'])->name('home');
+Route::get('/', [UserController::class, 'ShowLogin'])->name('login.auth');
+Route::post('/login_proses', action: [UserController::class, 'loginAuth'])->name('login.proses');
+
+// Route::middleware('IsLogin')->group(function () {
+// });
 
 Route::prefix('/visit')->name('visit.')->group(function () {
     Route::get('/', [VisitController::class, 'index'])->name('data_visit'); // Menampilkan data
-    Route::get('/create', [VisitController::class, 'create'])->name('create_data_visit'); // Form create
+    Route::get('/join', [VisitController::class, 'create'])->name('create_data_visit'); // Form create
     Route::post('/store', [VisitController::class, 'store'])->name('store_data_visit'); // Menyimpan data baru (POST)
     Route::get('/{visit}/edit', [VisitController::class, 'edit'])->name('edit_data_visit'); // Form edit
     Route::patch('/update/{visit}', [VisitController::class, 'update'])->name('update_data_visit'); // Memperbarui data (PATCH)
     Route::delete('/delete/{visit}', [VisitController::class, 'destroy'])->name('delete_data_visit'); // Hapus data
+    Route::get('/visir/export/excel', [VisitController::class,'exportExcel'])->name('visit.admin.export');
 });
 
 Route::prefix('members')->name('member.')->group(function () {

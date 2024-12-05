@@ -61,6 +61,10 @@ class MemberController extends Controller
         return redirect()->route('member.data_member')->with('success', 'Member successfully added with Membership Number: ' . $membershipNumber);
     }
 
+    public function addMember(Request $request){
+        
+    }
+
 
     /**
      * Show the form for editing the specified resource.

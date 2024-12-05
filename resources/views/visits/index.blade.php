@@ -1,17 +1,20 @@
 @extends('homepages.homepage')
 
 @section('content')
-    <div class="container mt-5">
-        <h3>Data Visit</h3>
+    <div class="container mt-5 pt-5"> <!-- Added pt-5 for top padding -->
+        <h3 class="mb-4" style="font-size: 2rem; color: #333; font-weight: 600;">Data Visit</h3>
 
+        <!-- Success Message -->
         @if (Session::get('success'))
-            <div class="alert alert-success">
+            <div class="alert alert-success mb-4">
                 {{ Session::get('success') }}
             </div>
         @endif
+
+        <!-- Error Messages -->
         @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
+            <div class="alert alert-danger mb-4">
+                <ul class="mb-0">
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
@@ -19,19 +22,20 @@
             </div>
         @endif
 
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <a href="{{ route('visit.create_data_visit') }}" class="btn btn-warning">Tambah Kunjungan</a>
-            <form class="d-flex me-2" role="Search" action="{{ route('visit.data_visit') }}" method="GET">
-                <input type="text" name="search_visit" class="form-control me-2" placeholder="Search"
-                    aria-label="Search">
-                <button class="btn btn-outline-success me-2" type="submit">Search</button>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <a href="{{ route('visit.create_data_visit') }}" class="btn btn-warning py-2 px-4">Tambah Kunjungan</a>
+            <a href="{{ route('visit.visit.admin.export')}}" class="btn btn-primary py-2 px-4">Export</a>
+            <form class="d-flex w-50" role="Search" action="{{ route('visit.data_visit') }}" method="GET">
+                <input type="text" name="search_visit" class="form-control me-2" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
             </form>
+
         </div>
 
         <div class="table-responsive">
-            <table class="table table-hover table-striped table-dark border-0">
-                <thead class="thead-light">
-                    <tr>
+            <table class="table table-hover table-striped table-bordered">
+                <thead>
+                    <tr class="bg-dark text-white">
                         <th>No</th>
                         <th>Nama</th>
                         <th>Umur</th>
@@ -54,10 +58,8 @@
                                 <td>{{ $visit->gender == 'L' ? 'Laki-laki' : 'Perempuan' }}</td>
                                 <td>{{ $visit->time }}</td>
                                 <td>
-                                    <a href="{{ route('visit.edit_data_visit', $visit->id) }}"
-                                        class="btn btn-sm btn-warning">Edit</a>
-                                    <button type="button" class="btn btn-sm btn-danger"
-                                        onclick="showModal('{{ $visit['id'] }}', '{{ $visit['name'] }}')">Hapus</button>
+                                    <a href="{{ route('visit.edit_data_visit', $visit->id) }}" class="btn btn-sm btn-warning">Edit</a>
+                                    <button type="button" class="btn btn-sm btn-danger" onclick="showModal('{{ $visit['id'] }}', '{{ $visit['name'] }}')">Hapus</button>
                                 </td>
                             </tr>
                         @endforeach
@@ -72,40 +74,42 @@
 
         <!-- Modal Hapus -->
         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <form id="form-delete-visit" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <div class="modal-content" style="background-color: black; color: white;">
-                        <div class="modal-header" style="background-color: #343a40; color: white;">
-                            <h5 class="modal-title" id="exampleModalLabel">Hapus Data Visit</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true" style="filter: invert(1);">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            Apakah anda yakin ingin menghapus data ini: <span id="nama-visit"></span>?
-                        </div>
-                        <div class="modal-footer" style="background-color: #343a40;">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batalkan</button>
-                            <button type="submit" class="btn btn-danger" id="confirm-delete">Hapus</button>
-                        </div>
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form id="form-delete-member" method="POST">
+                @csrf
+                @method('DELETE')
+                <div class="modal-content" style="background-color: black; color: white;">
+                    <div class="modal-header" style="background-color: #343a40;">
+                        <h5 class="modal-title" id="exampleModalLabel">Hapus Data Member</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                </form>
-            </div>
+                    <div class="modal-body">
+                        Apakah Anda yakin ingin menghapus data ini: <span id="nama-member"></span>?
+                    </div>
+                    <div class="modal-footer" style="background-color: #343a40;">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batalkan</button>
+                        <button type="submit" class="btn btn-danger" id="confirm-delete">Hapus</button>
+                    </div>
+                </div>
+            </form>
         </div>
+    </div>
 
-    @endsection
+@endsection
 
-    @push('script')
-        <script>
-            function showModal(id, name) {
-                let urlDelete = "{{ route('visit.delete_data_visit', ':visit') }}";
-                urlDelete = urlDelete.replace(':visit', id);
-                document.getElementById('form-delete-visit').setAttribute('action', urlDelete);
-                document.getElementById('nama-visit').innerText = name;
-                $('#exampleModal').modal('show'); // Menggunakan jQuery untuk menampilkan modal di Bootstrap 4
-            }
-        </script>
+@push('script')
+    <script>
+        // Function to trigger the modal and set the form action dynamically
+        function showModal(id, name) {
+            let urlDelete = "{{ route('member.delete_data_member', ':member') }}";
+            urlDelete = urlDelete.replace(':member', id);
+            document.getElementById('form-delete-member').setAttribute('action', urlDelete);
+            document.getElementById('nama-member').innerText = name;
+
+            // Show the modal using Bootstrap 5 JavaScript method
+            var modal = new bootstrap.Modal(document.getElementById('exampleModal'));
+            modal.show();
+        }
+    </script>
     @endpush

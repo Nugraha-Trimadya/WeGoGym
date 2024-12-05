@@ -4,12 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\Visit;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\VisitExport;
 
 class VisitController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    public function exportExcel() 
+    {
+        return Excel::download(new VisitExport, 'rekap-visit.xlsx');
+    }
     public function index()
     {
         $visits = Visit::where('name', 'LIKE', '%'.request('search_visit').'%')->orderBy('name', 'ASC')->simplePaginate(10);
